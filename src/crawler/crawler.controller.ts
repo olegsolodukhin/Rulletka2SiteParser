@@ -39,7 +39,12 @@ export class CrawlerController {
 
   @Get('pages/:id')
   async getPage(@Param('id') id: string) {
-    const page = await this.crawlerService.getCrawledPage(Number(id));
+    const pageId = parseInt(id, 10);
+    if (isNaN(pageId)) {
+      throw new HttpException('Invalid page ID', HttpStatus.BAD_REQUEST);
+    }
+
+    const page = await this.crawlerService.getCrawledPage(pageId);
     if (!page) {
       throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
     }
@@ -51,8 +56,13 @@ export class CrawlerController {
 
   @Delete('pages/:id')
   async deletePage(@Param('id') id: string) {
+    const pageId = parseInt(id, 10);
+    if (isNaN(pageId)) {
+      throw new HttpException('Invalid page ID', HttpStatus.BAD_REQUEST);
+    }
+
     try {
-      await this.crawlerService.deleteCrawledPage(Number(id));
+      await this.crawlerService.deleteCrawledPage(pageId);
       return {
         success: true,
         message: 'Page deleted successfully',

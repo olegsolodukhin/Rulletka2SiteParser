@@ -1,5 +1,5 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
-import { chromium, Browser, Page } from 'playwright';
+import { chromium, Browser } from 'playwright';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -30,9 +30,10 @@ export class CrawlerService implements OnModuleDestroy {
       },
     });
 
+    let page;
     try {
       const browser = await this.getBrowser();
-      const page: Page = await browser.newPage();
+      page = await browser.newPage();
 
       // Navigate to the URL
       await page.goto(url, { waitUntil: 'networkidle' });
@@ -52,8 +53,6 @@ export class CrawlerService implements OnModuleDestroy {
           }))
         );
       });
-
-      await page.close();
 
       // Save the crawled page
       const crawledPage = await this.prisma.crawledPage.upsert({
@@ -96,6 +95,11 @@ export class CrawlerService implements OnModuleDestroy {
       });
 
       throw error;
+    } finally {
+      // Ensure page is closed even if an error occurs
+      if (page) {
+        await page.close();
+      }
     }
   }
 

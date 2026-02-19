@@ -5,5 +5,6 @@ import { CrawlerController } from './crawler.controller';
 @Module({
   controllers: [CrawlerController],
   providers: [CrawlerService],
+  exports: [CrawlerService],
 })
 export class CrawlerModule {}

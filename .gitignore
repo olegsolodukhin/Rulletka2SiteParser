@@ -1,6 +1,12 @@
 # compiled output
 /dist
-/node_modules
+# server
+/server/node_modules
+/server/dist
+
+#admin
+/admin/node_modules
+/admin/.next
 
 # Logs
 logs
@@ -40,7 +46,7 @@ lerna-debug.log*
 .env.*.local
 
 # Prisma
-prisma/migrations
+server/prisma/migrations
 *.db
 *.db-journal
 prisma.config.ts

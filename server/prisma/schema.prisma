@@ -30,3 +30,14 @@ model CrawlJob {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model ScheduledTask {
+  id            Int      @id @default(autoincrement())
+  name          String
+  url           String
+  cronExpression String  // e.g. "0 * * * *" = every hour
+  enabled       Boolean  @default(true)
+  lastRunAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
